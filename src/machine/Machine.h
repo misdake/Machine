@@ -8,11 +8,13 @@
 class Machine {
 private:
     std::map<uint16_t, InstructionDefinition> defs;
-public:
 
-    void defineInstruction(uint16_t opcode, OprandType oprandType, std::function<void(Machine&, const Instruction&)>&& function) {
+public:
+    Data registers[32];
+
+    void defineInstruction(uint16_t opcode, const char* name, std::function<void(Machine&, const Instruction&)>&& function) {
         //TODO check correctness
-        defs.emplace(std::make_pair(opcode, InstructionDefinition{opcode, oprandType, std::move(function)}));
+        defs.emplace(std::make_pair(opcode, InstructionDefinition{opcode, name, std::move(function)}));
     }
 
     void run(const Program& program) {
