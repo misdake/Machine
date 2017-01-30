@@ -9,7 +9,7 @@
 
 class Machine {
 private:
-    typedef std::function<void(Machine&, const Instruction&)> InstructionFunction;
+    typedef std::function<jumpdiff(Machine&, const Instruction&)> InstructionFunction;
 
     struct InstructionDefinition {
         const char* name;
@@ -33,14 +33,16 @@ private:
         return iterator->second;
     }
 
-    void define(const char* name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)>&& function) {
+    void define(const char* name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function) {
         auto iterator = nameMap.find(name);
         if (iterator == nameMap.end()) {
             OpCode opCode = nameMap[name] = next++;
-            defs.push_back(InstructionDefinition{name, opCode, opType, std::move(function)});
+            defs.push_back(InstructionDefinition{name, opCode, opType, function});
+            std::cout << "define instruction '" << name << "'" << std::endl;
         } else {
             OpCode opCode = nameMap[name];
-            defs[opCode] = InstructionDefinition{name, opCode, opType, std::move(function)};
+            defs[opCode] = InstructionDefinition{name, opCode, opType, function};
+            std::cout << "redefine instruction '" << name << "'" << std::endl;
         }
     }
 
@@ -54,50 +56,50 @@ public:
         delete[] registers;
     }
 
-    void defineN(const char* name, FunctionN function);
+    void defineN(const char* name, FunctionN&& function);
 
-    void defineR(const char* name, FunctionR function);
+    void defineR(const char* name, FunctionR&& function);
 
-    void defineI(const char* name, FunctionI function);
+    void defineI(const char* name, FunctionI&& function);
 
-    void defineRR(const char* name, FunctionRR function);
+    void defineRR(const char* name, FunctionRR&& function);
 
-    void defineRI(const char* name, FunctionRI function);
+    void defineRI(const char* name, FunctionRI&& function);
 
-    void defineIR(const char* name, FunctionIR function);
+    void defineIR(const char* name, FunctionIR&& function);
 
-    void defineII(const char* name, FunctionII function);
+    void defineII(const char* name, FunctionII&& function);
 
-    void defineRRR(const char* name, FunctionRRR function);
+    void defineRRR(const char* name, FunctionRRR&& function);
 
-    void defineRRI(const char* name, FunctionRRI function);
+    void defineRRI(const char* name, FunctionRRI&& function);
 
-    void defineRIR(const char* name, FunctionRIR function);
+    void defineRIR(const char* name, FunctionRIR&& function);
 
-    void defineRII(const char* name, FunctionRII function);
+    void defineRII(const char* name, FunctionRII&& function);
 
-    void defineIRR(const char* name, FunctionIRR function);
+    void defineIRR(const char* name, FunctionIRR&& function);
 
-    void defineIRI(const char* name, FunctionIRI function);
+    void defineIRI(const char* name, FunctionIRI&& function);
 
-    void defineIIR(const char* name, FunctionIIR function);
+    void defineIIR(const char* name, FunctionIIR&& function);
 
-    void defineIII(const char* name, FunctionIII function);
+    void defineIII(const char* name, FunctionIII&& function);
 
     Instruction instruction(const char* name) {
         return Instruction(getOpCode(name));
     }
 
     Instruction instruction(const char* name, int32_t d0) {
-        return Instruction(nameMap[name], d0);
+        return Instruction(getOpCode(name), d0);
     }
 
     Instruction instruction(const char* name, int32_t d0, int32_t d1) {
-        return Instruction(nameMap[name], d0, d1);
+        return Instruction(getOpCode(name), d0, d1);
     }
 
     Instruction instruction(const char* name, int32_t d0, int32_t d1, int32_t d2) {
-        return Instruction(nameMap[name], d0, d1, d2);
+        return Instruction(getOpCode(name), d0, d1, d2);
     }
 
     void run(const Program& program) {
@@ -113,8 +115,9 @@ public:
     jumpdiff run(const Instruction& instruction) {
         if (instruction.opCode >= 0) {
             InstructionDefinition& def = defs[instruction.opCode];
-            def.function(*this, instruction);
+            return def.function(*this, instruction);
         }
+        return 0;
     }
 };
 
