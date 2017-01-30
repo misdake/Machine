@@ -14,7 +14,7 @@ int main() {
             std::cout << "Hello, World!" << std::endl;
             return 0;
         });
-        machine.defineR("print r0", [](Data& reg) -> jumpdiff {
+        machine.defineR("print_reg", [](Data& reg) -> jumpdiff {
             std::cout << reg.i << std::endl;
             return 0;
         });
@@ -22,10 +22,10 @@ int main() {
 
     Program program{{
                             machine.instruction("hello world"),
-                            machine.instruction("set2i", 0, 0),
-                            machine.instruction("print r0", 0),
-                            machine.instruction("add2i", 0, 1),
-                            machine.instruction("jl_ii", 0, 10, -3)
+                            machine.instruction("set_ri", 0, 0),
+                            machine.instruction("print_reg_r", 0),
+                            machine.instruction("add_ri", 0, 1),
+                            machine.instruction("jl_rii", 0, 10, -3)
                     }};
     machine.run(program);
     return 0;

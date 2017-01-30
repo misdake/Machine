@@ -7,12 +7,14 @@
 #include "../program/Program.h"
 #include "../instruction/Instruction.h"
 
+class Machine;
+
+typedef std::function<jumpdiff(Machine&, const Instruction&)> InstructionFunction;
+
 class Machine {
 private:
-    typedef std::function<jumpdiff(Machine&, const Instruction&)> InstructionFunction;
-
     struct InstructionDefinition {
-        const char* name;
+        std::string name;
         OpCode opCode;
         OpType opType;
         InstructionFunction function;
@@ -24,6 +26,16 @@ private:
     std::map<std::string, OpCode> nameMap;
     OpCode next;
 
+public:
+    Machine(unsigned int registerCount) {
+        registers = new Data[registerCount];
+        next = 0;
+    }
+
+    ~Machine() {
+        delete[] registers;
+    }
+
     OpCode getOpCode(const char* name) {
         auto iterator = nameMap.find(name);
         if (iterator == nameMap.end()) {
@@ -33,7 +45,7 @@ private:
         return iterator->second;
     }
 
-    void define(const char* name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function) {
+    void define(const std::string& name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function) {
         auto iterator = nameMap.find(name);
         if (iterator == nameMap.end()) {
             OpCode opCode = nameMap[name] = next++;
@@ -46,45 +58,35 @@ private:
         }
     }
 
-public:
-    Machine(unsigned int registerCount) {
-        registers = new Data[registerCount];
-        next = 0;
-    }
+    void defineN(const std::string& name, FunctionN&& function);
 
-    ~Machine() {
-        delete[] registers;
-    }
+    void defineR(const std::string& name, FunctionR&& function);
 
-    void defineN(const char* name, FunctionN&& function);
+    void defineI(const std::string& name, FunctionI&& function);
 
-    void defineR(const char* name, FunctionR&& function);
+    void defineRR(const std::string& name, FunctionRR&& function);
 
-    void defineI(const char* name, FunctionI&& function);
+    void defineRI(const std::string& name, FunctionRI&& function);
 
-    void defineRR(const char* name, FunctionRR&& function);
+    void defineIR(const std::string& name, FunctionIR&& function);
 
-    void defineRI(const char* name, FunctionRI&& function);
+    void defineII(const std::string& name, FunctionII&& function);
 
-    void defineIR(const char* name, FunctionIR&& function);
+    void defineRRR(const std::string& name, FunctionRRR&& function);
 
-    void defineII(const char* name, FunctionII&& function);
+    void defineRRI(const std::string& name, FunctionRRI&& function);
 
-    void defineRRR(const char* name, FunctionRRR&& function);
+    void defineRIR(const std::string& name, FunctionRIR&& function);
 
-    void defineRRI(const char* name, FunctionRRI&& function);
+    void defineRII(const std::string& name, FunctionRII&& function);
 
-    void defineRIR(const char* name, FunctionRIR&& function);
+    void defineIRR(const std::string& name, FunctionIRR&& function);
 
-    void defineRII(const char* name, FunctionRII&& function);
+    void defineIRI(const std::string& name, FunctionIRI&& function);
 
-    void defineIRR(const char* name, FunctionIRR&& function);
+    void defineIIR(const std::string& name, FunctionIIR&& function);
 
-    void defineIRI(const char* name, FunctionIRI&& function);
-
-    void defineIIR(const char* name, FunctionIIR&& function);
-
-    void defineIII(const char* name, FunctionIII&& function);
+    void defineIII(const std::string& name, FunctionIII&& function);
 
     Instruction instruction(const char* name) {
         return Instruction(getOpCode(name));
