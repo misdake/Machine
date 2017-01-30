@@ -4,23 +4,41 @@
 
 int main() {
     Machine machine(16);
-    machine.defineN("hello world", []() {
+    machine.defineN("hello world", []() -> jumpdiff {
         std::cout << "Hello, World!" << std::endl;
+        return 0;
     });
-
-    machine.defineRI("=imm", [](Data& reg, const Data& imm) {
+    machine.defineRI("=imm", [](Data& reg, const Data& imm) -> jumpdiff {
         reg.i = imm.i;
+        return 0;
     });
-    machine.defineR("print r0", [](Data& reg) {
+    machine.defineRI("+=imm", [](Data& reg, const Data& imm) -> jumpdiff {
+        reg.i += imm.i;
+        return 0;
+    });
+    machine.defineRR("+=reg", [](Data& r, Data& d) -> jumpdiff {
+        r.i += d.i;
+        return 0;
+    });
+    machine.defineRII("if<imm,j", [](Data& reg, const Data& imm, const Data& j) -> jumpdiff {
+        if (reg.i < imm.i) {
+            return j.i;
+        } else {
+            return 0;
+        }
+    });
+    machine.defineR("print r", [](Data& reg) -> jumpdiff {
         std::cout << reg.i << std::endl;
+        return 0;
     });
 
-    Instruction i0 = machine.instruction("hello world");
-    Instruction i1 = machine.instruction("=imm", 5, 123);
-    Instruction i2 = machine.instruction("print r0", 5);
-    Instruction i3 = machine.instruction("abcde");
-
-    Program program{{i0, i1, i2, i3}};
+    Program program{{
+                            machine.instruction("hello world"),
+                            machine.instruction("=imm", 0, 0),
+                            machine.instruction("print r", 0),
+                            machine.instruction("+=imm", 0, 1),
+                            machine.instruction("if<imm,j", 0, 10, -3)
+                    }};
     machine.run(program);
     return 0;
 }

@@ -9,6 +9,15 @@
 
 class Machine {
 private:
+    typedef std::function<void(Machine&, const Instruction&)> InstructionFunction;
+
+    struct InstructionDefinition {
+        const char* name;
+        OpCode opCode;
+        OpType opType;
+        InstructionFunction function;
+    };
+
     Data* registers;
 
     std::vector<InstructionDefinition> defs;
@@ -24,7 +33,7 @@ private:
         return iterator->second;
     }
 
-    void define(const char* name, OpType opType, std::function<void(Machine&, const Instruction&)>&& function) {
+    void define(const char* name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)>&& function) {
         auto iterator = nameMap.find(name);
         if (iterator == nameMap.end()) {
             OpCode opCode = nameMap[name] = next++;
@@ -92,15 +101,18 @@ public:
     }
 
     void run(const Program& program) {
-        for (auto i = program.instructions.begin(); i != program.instructions.end(); i++) {
-            run(*i);
+        int min = 0, max = program.instructions.size() - 1;
+        int pointer = 0;
+        while (pointer <= max) {
+            jumpdiff i = run(program.instructions[pointer]);
+            pointer += i + 1;
+            if (pointer < min) pointer = min;
         }
     }
 
-    void run(const Instruction& instruction) {
+    jumpdiff run(const Instruction& instruction) {
         if (instruction.opCode >= 0) {
             InstructionDefinition& def = defs[instruction.opCode];
-            assert(def.opCode == instruction.opCode);
             def.function(*this, instruction);
         }
     }
