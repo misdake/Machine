@@ -3,7 +3,7 @@
 #include <functional>
 #include "../machine/Data.h"
 
-typedef uint16_t OpCode;
+typedef int16_t OpCode;
 
 struct Instruction {
     OpCode opCode;
@@ -14,15 +14,18 @@ struct Instruction {
     Instruction(OpCode opCode) {
         this->opCode = opCode;
     }
+
     Instruction(OpCode opCode, int32_t d0) {
         this->opCode = opCode;
         oprand0.i = d0;
     }
+
     Instruction(OpCode opCode, int32_t d0, int32_t d1) {
         this->opCode = opCode;
         oprand0.i = d0;
         oprand1.i = d1;
     }
+
     Instruction(OpCode opCode, int32_t d0, int32_t d1, int32_t d2) {
         this->opCode = opCode;
         oprand0.i = d0;
