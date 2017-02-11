@@ -14,7 +14,7 @@ int main() {
             std::cout << "Hello, World!" << std::endl;
             return 0;
         });
-        machine.defineR("print_reg", [](Data& reg) -> jumpdiff {
+        machine.defineR("print_reg", [](Reg reg) -> jumpdiff {
             std::cout << reg.i << std::endl;
             return 0;
         });

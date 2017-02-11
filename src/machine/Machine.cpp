@@ -7,6 +7,56 @@
 #define I1 instruction.oprand1
 #define I2 instruction.oprand2
 
+Machine::Machine(unsigned int registerCount) {
+    registers = new Data[registerCount];
+    next = 0;
+}
+
+Machine::~Machine() {
+    delete[] registers;
+}
+
+OpCode Machine::getOpCode(const char* name) {
+    auto iterator = nameMap.find(name);
+    if (iterator == nameMap.end()) {
+        std::cout << "unknown instruction '" << name << "'" << std::endl;
+        return -1;
+    }
+    return iterator->second;
+}
+
+void Machine::define(const std::string& name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function) {
+    auto iterator = nameMap.find(name);
+    if (iterator == nameMap.end()) {
+        OpCode opCode = nameMap[name] = next++;
+        defs.push_back(InstructionDefinition{name, opCode, opType, function});
+//            std::cout << "define instruction '" << name << "'" << std::endl;
+    } else {
+        OpCode opCode = nameMap[name];
+        defs[opCode] = InstructionDefinition{name, opCode, opType, function};
+        std::cout << "redefine instruction '" << name << "'" << std::endl;
+    }
+}
+
+void Machine::run(const Program& program) {
+    int min = 0, max = program.instructions.size() - 1;
+    int pointer = 0;
+    while (pointer <= max) {
+        jumpdiff i = run(program.instructions[pointer]);
+        pointer += i + 1;
+        if (pointer < min) pointer = min;
+    }
+}
+
+jumpdiff Machine::run(const Instruction& instruction) {
+    if (instruction.opCode >= 0) {
+        InstructionDefinition& def = defs[instruction.opCode];
+        return def.function(*this, instruction);
+    }
+    return 0;
+}
+
+
 void Machine::defineN(const std::string& name, FunctionN&& function) {
     define(name, OpType::N, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
         return function();
@@ -37,12 +87,6 @@ void Machine::defineRI(const std::string& name, FunctionRI&& function) {
     });
 }
 
-void Machine::defineIR(const std::string& name, FunctionIR&& function) {
-    define(name + "_ir", OpType::IR, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
-        return function(I0, R1);
-    });
-}
-
 void Machine::defineII(const std::string& name, FunctionII&& function) {
     define(name + "_ii", OpType::II, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
         return function(I0, I1);
@@ -61,36 +105,11 @@ void Machine::defineRRI(const std::string& name, FunctionRRI&& function) {
     });
 }
 
-void Machine::defineRIR(const std::string& name, FunctionRIR&& function) {
-    define(name + "_rir", OpType::RIR, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
-        return function(R0, I1, R2);
-    });
-}
-
 void Machine::defineRII(const std::string& name, FunctionRII&& function) {
     define(name + "_rii", OpType::RII, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
         return function(R0, I1, I2);
     });
 }
-
-void Machine::defineIRR(const std::string& name, FunctionIRR&& function) {
-    define(name + "_irr", OpType::IRR, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
-        return function(I0, R1, R2);
-    });
-}
-
-void Machine::defineIRI(const std::string& name, FunctionIRI&& function) {
-    define(name + "_iri", OpType::IRI, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
-        return function(I0, R1, I2);
-    });
-}
-
-void Machine::defineIIR(const std::string& name, FunctionIIR&& function) {
-    define(name + "_iir", OpType::IIR, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
-        return function(I0, I1, R2);
-    });
-}
-
 void Machine::defineIII(const std::string& name, FunctionIII&& function) {
     define(name + "_iii", OpType::III, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
         return function(I0, I1, I2);

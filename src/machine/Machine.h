@@ -27,36 +27,13 @@ private:
     OpCode next;
 
 public:
-    Machine(unsigned int registerCount) {
-        registers = new Data[registerCount];
-        next = 0;
-    }
+    Machine(unsigned int registerCount);
 
-    ~Machine() {
-        delete[] registers;
-    }
+    ~Machine();
 
-    OpCode getOpCode(const char* name) {
-        auto iterator = nameMap.find(name);
-        if (iterator == nameMap.end()) {
-            std::cout << "unknown instruction '" << name << "'" << std::endl;
-            return -1;
-        }
-        return iterator->second;
-    }
+    OpCode getOpCode(const char* name);
 
-    void define(const std::string& name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function) {
-        auto iterator = nameMap.find(name);
-        if (iterator == nameMap.end()) {
-            OpCode opCode = nameMap[name] = next++;
-            defs.push_back(InstructionDefinition{name, opCode, opType, function});
-            std::cout << "define instruction '" << name << "'" << std::endl;
-        } else {
-            OpCode opCode = nameMap[name];
-            defs[opCode] = InstructionDefinition{name, opCode, opType, function};
-            std::cout << "redefine instruction '" << name << "'" << std::endl;
-        }
-    }
+    void define(const std::string& name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function);
 
     void defineN(const std::string& name, FunctionN&& function);
 
@@ -68,23 +45,13 @@ public:
 
     void defineRI(const std::string& name, FunctionRI&& function);
 
-    void defineIR(const std::string& name, FunctionIR&& function);
-
     void defineII(const std::string& name, FunctionII&& function);
 
     void defineRRR(const std::string& name, FunctionRRR&& function);
 
     void defineRRI(const std::string& name, FunctionRRI&& function);
 
-    void defineRIR(const std::string& name, FunctionRIR&& function);
-
     void defineRII(const std::string& name, FunctionRII&& function);
-
-    void defineIRR(const std::string& name, FunctionIRR&& function);
-
-    void defineIRI(const std::string& name, FunctionIRI&& function);
-
-    void defineIIR(const std::string& name, FunctionIIR&& function);
 
     void defineIII(const std::string& name, FunctionIII&& function);
 
@@ -104,23 +71,9 @@ public:
         return Instruction(getOpCode(name), d0, d1, d2);
     }
 
-    void run(const Program& program) {
-        int min = 0, max = program.instructions.size() - 1;
-        int pointer = 0;
-        while (pointer <= max) {
-            jumpdiff i = run(program.instructions[pointer]);
-            pointer += i + 1;
-            if (pointer < min) pointer = min;
-        }
-    }
+    void run(const Program& program);
 
-    jumpdiff run(const Instruction& instruction) {
-        if (instruction.opCode >= 0) {
-            InstructionDefinition& def = defs[instruction.opCode];
-            return def.function(*this, instruction);
-        }
-        return 0;
-    }
+    jumpdiff run(const Instruction& instruction);
 };
 
 

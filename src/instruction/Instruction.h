@@ -26,26 +26,24 @@ public:
 };
 
 enum class OpType {
-    N, R, I, RR, RI, IR, II, RRR, RRI, RIR, RII, IRR, IRI, IIR, III, OTHER
+    N, R, I, RR, RI, II, RRR, RRI, RII, III,
 };
 
 typedef int32_t jumpdiff;
 
+typedef Data& Reg;
+typedef const Data& Imm;
+
 typedef std::function<jumpdiff()> FunctionN;
 
-typedef std::function<jumpdiff(Data&)> FunctionR;
-typedef std::function<jumpdiff(const Data&)> FunctionI;
+typedef std::function<jumpdiff(Reg)> FunctionR;
+typedef std::function<jumpdiff(Imm)> FunctionI;
 
-typedef std::function<jumpdiff(Data&, Data&)> FunctionRR;
-typedef std::function<jumpdiff(Data&, const Data&)> FunctionRI;
-typedef std::function<jumpdiff(const Data&, Data&)> FunctionIR;
-typedef std::function<jumpdiff(const Data&, const Data&)> FunctionII;
+typedef std::function<jumpdiff(Reg, Reg)> FunctionRR;
+typedef std::function<jumpdiff(Reg, Imm)> FunctionRI;
+typedef std::function<jumpdiff(Imm, Imm)> FunctionII;
 
-typedef std::function<jumpdiff(Data&, Data&, Data&)> FunctionRRR;
-typedef std::function<jumpdiff(Data&, Data&, const Data&)> FunctionRRI;
-typedef std::function<jumpdiff(Data&, const Data&, Data&)> FunctionRIR;
-typedef std::function<jumpdiff(Data&, const Data&, const Data&)> FunctionRII;
-typedef std::function<jumpdiff(const Data&, Data&, Data&)> FunctionIRR;
-typedef std::function<jumpdiff(const Data&, Data&, const Data&)> FunctionIRI;
-typedef std::function<jumpdiff(const Data&, const Data&, Data&)> FunctionIIR;
-typedef std::function<jumpdiff(const Data&, const Data&, const Data&)> FunctionIII;
+typedef std::function<jumpdiff(Reg, Reg, Reg)> FunctionRRR;
+typedef std::function<jumpdiff(Reg, Reg, Imm)> FunctionRRI;
+typedef std::function<jumpdiff(Reg, Imm, Imm)> FunctionRII;
+typedef std::function<jumpdiff(Imm, Imm, Imm)> FunctionIII;
