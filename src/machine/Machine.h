@@ -20,6 +20,7 @@ private:
         InstructionFunction function;
     };
 
+    int32_t registerCount;
     Data* registers;
 
     std::vector<InstructionDefinition> defs;
@@ -71,9 +72,17 @@ public:
         return Instruction(getOpCode(name), d0, d1, d2);
     }
 
+    Data& reg(int32_t addr);
+
     void run(const Program& program);
 
     jumpdiff run(const Instruction& instruction);
+
+    void printReg() {
+        for (int i = 0; i != registerCount; i++) {
+            std::cout << "r" << (i < 10 ? "0" : "") << i << ": " << registers[i].i << "\n";
+        }
+    }
 };
 
 

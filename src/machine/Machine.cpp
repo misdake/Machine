@@ -8,6 +8,7 @@
 #define I2 instruction.oprand2
 
 Machine::Machine(unsigned int registerCount) {
+    this->registerCount = registerCount;
     registers = new Data[registerCount];
     next = 0;
 }
@@ -114,4 +115,9 @@ void Machine::defineIII(const std::string& name, FunctionIII&& function) {
     define(name + "_iii", OpType::III, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
         return function(I0, I1, I2);
     });
+}
+Data& Machine::reg(int32_t addr) {
+    if (addr < 0) addr = 0;
+    if (addr >= registerCount) addr = registerCount - 1;
+    return registers[addr];
 }

@@ -8,6 +8,7 @@ int main() {
     Machine machine(16);
     defineArithmetic(machine);
     defineJump(machine);
+    defineMemory(machine);
 
     {
         machine.defineN("hello world", []() -> jumpdiff {
@@ -24,9 +25,11 @@ int main() {
                             machine.instruction("hello world"),
                             machine.instruction("set_ri", 0, 0),
                             machine.instruction("print_reg_r", 0),
+                            machine.instruction("write_reg_rr", 0, 0),
                             machine.instruction("add_ri", 0, 1),
-                            machine.instruction("jl_rii", 0, 10, -3)
+                            machine.instruction("jl_rii", 0, 10, -4)
                     }};
     machine.run(program);
+    machine.printReg();
     return 0;
 }
