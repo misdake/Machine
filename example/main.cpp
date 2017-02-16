@@ -3,6 +3,7 @@
 #include "../src/isa/all.h"
 #include "../src/instruction/Instruction.h"
 #include "../src/machine/Machine.h"
+#include "../src/instruction/Parser.h"
 
 int main() {
     Machine machine(16);
@@ -10,25 +11,27 @@ int main() {
     defineJump(machine);
     defineMemory(machine);
 
-    {
-        machine.defineN("hello world", []() -> jumpdiff {
-            std::cout << "Hello, World!" << std::endl;
-            return 0;
-        });
-        machine.defineR("print_reg", [](Reg reg) -> jumpdiff {
-            std::cout << reg.i << std::endl;
-            return 0;
-        });
-    }
+    machine.defineN("hello_world", []() -> jumpdiff {
+        std::cout << "Hello, World!" << std::endl;
+        return 0;
+    });
+    machine.defineR("print_reg", [](Reg reg) -> jumpdiff {
+        std::cout << reg.i << std::endl;
+        return 0;
+    });
 
-    Program program{{
-                            machine.instruction("hello world"),
-                            machine.instruction("set_ri", 0, 0),
-                            machine.instruction("print_reg_r", 0),
-                            machine.instruction("write_reg_rr", 0, 0),
-                            machine.instruction("add_ri", 0, 1),
-                            machine.instruction("jl_rii", 0, 10, -4)
-                    }};
+
+    Parser parser(machine);
+
+    Program program = parser.parseProgram(
+            ""
+                    "hello_world;"
+                    "set r0, 0;"
+                    "print_reg r0;"
+                    "write_reg r0, r0;"
+                    "add r0, 1;"
+                    "jl r0, 10, -4;"
+    );
     machine.run(program);
     machine.printReg();
     return 0;

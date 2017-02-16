@@ -7,9 +7,12 @@ set(SOURCE_FILES
         example/main.cpp
 
         src/machine/Machine.cpp src/machine/Machine.h
-        src/program/Program.cpp src/program/Program.h
-        src/instruction/Instruction.cpp src/instruction/Instruction.h
         src/machine/Data.cpp src/machine/Data.h
+
+        src/program/Program.cpp src/program/Program.h
+
+        src/instruction/Instruction.cpp src/instruction/Instruction.h
+        src/instruction/Parser.cpp src/instruction/Parser.h
 
         src/isa/all.h
         src/isa/arithmetic.cpp src/isa/arithmetic.h

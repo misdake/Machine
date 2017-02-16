@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+
 #include "../machine/Data.h"
 
 typedef int16_t OpCode;
