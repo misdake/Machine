@@ -10,9 +10,8 @@ struct Instruction {
 private:
     friend class Machine;
 
-    const OpCode opCode;
-
 public:
+    const OpCode opCode;
     const Data oprand0;
     const Data oprand1;
     const Data oprand2;

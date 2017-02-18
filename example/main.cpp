@@ -4,6 +4,7 @@
 #include "../src/instruction/Instruction.h"
 #include "../src/machine/Machine.h"
 #include "../src/instruction/Parser.h"
+#include "../src/instruction/Printer.h"
 
 int main() {
     Machine machine(16);
@@ -22,7 +23,6 @@ int main() {
 
 
     Parser parser(machine);
-
     Program program = parser.parseProgram(
             ""
                     "hello_world;"
@@ -34,5 +34,10 @@ int main() {
     );
     machine.run(program);
     machine.printReg();
+
+    Printer printer(machine);
+    std::string stringOutput = printer.print(program);
+    std::cout << stringOutput << std::endl;
+
     return 0;
 }

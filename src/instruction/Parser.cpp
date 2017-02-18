@@ -102,11 +102,9 @@ Instruction Parser::parseInstruction(const char* input) {
     }
     //add postfix
     std::string op = parts[0];
-    if (size > 1) {
-        op += '_';
-        for (int i = 0; i < tIndex; i++) {
-            op += d[i].c;
-        }
+    op += '_';
+    for (int i = 0; i < tIndex; i++) {
+        op += d[i].c;
     }
     switch (size) {
         case 1:

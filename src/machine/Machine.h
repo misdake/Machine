@@ -34,6 +34,9 @@ public:
 
     OpCode getOpCode(const char* name);
 
+    const std::string& opCodeName(OpCode opCode);
+    OpType opCodeType(OpCode opCode);
+
     void define(const std::string& name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function);
 
     void defineN(const std::string& name, FunctionN&& function);

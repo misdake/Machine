@@ -13,6 +13,7 @@ set(SOURCE_FILES
 
         src/instruction/Instruction.cpp src/instruction/Instruction.h
         src/instruction/Parser.cpp src/instruction/Parser.h
+        src/instruction/Printer.cpp src/instruction/Printer.h
 
         src/isa/all.h
         src/isa/arithmetic.cpp src/isa/arithmetic.h

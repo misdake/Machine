@@ -26,6 +26,16 @@ OpCode Machine::getOpCode(const char* name) {
     return iterator->second;
 }
 
+const std::string& Machine::opCodeName(OpCode opCode) {
+    InstructionDefinition& def = defs[opCode];
+    return def.name;
+}
+
+OpType Machine::opCodeType(OpCode opCode) {
+    InstructionDefinition& def = defs[opCode];
+    return def.opType;
+}
+
 void Machine::define(const std::string& name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function) {
     auto iterator = nameMap.find(name);
     if (iterator == nameMap.end()) {
@@ -59,7 +69,7 @@ jumpdiff Machine::run(const Instruction& instruction) {
 
 
 void Machine::defineN(const std::string& name, FunctionN&& function) {
-    define(name, OpType::N, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
+    define(name+ "_", OpType::N, [=](Machine& machine, const Instruction& instruction) -> jumpdiff {
         return function();
     });
 }
