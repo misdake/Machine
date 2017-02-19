@@ -15,6 +15,7 @@ class Machine {
 private:
     struct InstructionDefinition {
         std::string name;
+        std::string format;
         OpCode opCode;
         OpType opType;
         InstructionFunction function;
@@ -35,29 +36,32 @@ public:
     OpCode getOpCode(const char* name);
 
     const std::string& opCodeName(OpCode opCode);
+    const std::string& opCodeForamt(OpCode opCode);
     OpType opCodeType(OpCode opCode);
 
-    void define(const std::string& name, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function);
+    void define(const std::string& name, const std::string& format, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function);
 
     void defineN(const std::string& name, FunctionN&& function);
-
     void defineR(const std::string& name, FunctionR&& function);
-
     void defineI(const std::string& name, FunctionI&& function);
-
     void defineRR(const std::string& name, FunctionRR&& function);
-
     void defineRI(const std::string& name, FunctionRI&& function);
-
     void defineII(const std::string& name, FunctionII&& function);
-
     void defineRRR(const std::string& name, FunctionRRR&& function);
-
     void defineRRI(const std::string& name, FunctionRRI&& function);
-
     void defineRII(const std::string& name, FunctionRII&& function);
-
     void defineIII(const std::string& name, FunctionIII&& function);
+
+    void defineN(const std::string& name, const std::string& format, FunctionN&& function);
+    void defineR(const std::string& name, const std::string& format, FunctionR&& function);
+    void defineI(const std::string& name, const std::string& format, FunctionI&& function);
+    void defineRR(const std::string& name, const std::string& format, FunctionRR&& function);
+    void defineRI(const std::string& name, const std::string& format, FunctionRI&& function);
+    void defineII(const std::string& name, const std::string& format, FunctionII&& function);
+    void defineRRR(const std::string& name, const std::string& format, FunctionRRR&& function);
+    void defineRRI(const std::string& name, const std::string& format, FunctionRRI&& function);
+    void defineRII(const std::string& name, const std::string& format, FunctionRII&& function);
+    void defineIII(const std::string& name, const std::string& format, FunctionIII&& function);
 
     Instruction instruction(const char* name) {
         return Instruction(getOpCode(name));

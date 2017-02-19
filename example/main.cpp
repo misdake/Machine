@@ -13,9 +13,9 @@ int main() {
     defineMemory(machine);
 
     machine.defineN("hello_world", []() -> jumpdiff {
-        std::cout << "Hello, World!" << std::endl;
-        return 0;
-    });
+            std::cout << "Hello, World!" << std::endl;
+            return 0;
+        });
     machine.defineR("print_reg", [](Reg reg) -> jumpdiff {
         std::cout << reg.i << std::endl;
         return 0;
@@ -32,12 +32,13 @@ int main() {
                     "add r0, 1;"
                     "jl r0, 10, -4;"
     );
-    machine.run(program);
-    machine.printReg();
 
     Printer printer(machine);
     std::string stringOutput = printer.print(program);
     std::cout << stringOutput << std::endl;
+
+    machine.run(program);
+    machine.printReg();
 
     return 0;
 }

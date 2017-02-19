@@ -13,35 +13,35 @@ void defineArithmetic(Machine& machine) {
         r0.i = abs(r1.i);
         return 0;
     });
-    machine.defineRI("set", [](Reg r0, Imm i1) -> jumpdiff {
+    machine.defineRI("set", "%s = %s", [](Reg r0, Imm i1) -> jumpdiff {
         r0.i = i1.i;
         return 0;
     });
-    machine.defineRR("set", [](Reg r0, Reg r1) -> jumpdiff {
+    machine.defineRR("set", "%s = %s", [](Reg r0, Reg r1) -> jumpdiff {
         r0.i = r1.i;
         return 0;
     });
-    machine.defineRI("add", [](Reg r0, Imm i1) -> jumpdiff {
+    machine.defineRI("add", "%s += %s", [](Reg r0, Imm i1) -> jumpdiff {
         r0.i += i1.i;
         return 0;
     });
-    machine.defineRR("add", [](Reg r0, Reg r1) -> jumpdiff {
+    machine.defineRR("add", "%s += %s", [](Reg r0, Reg r1) -> jumpdiff {
         r0.i += r1.i;
         return 0;
     });
-    machine.defineRI("mul", [](Reg r0, Imm i1) -> jumpdiff {
+    machine.defineRI("mul", "%s *= %s", [](Reg r0, Imm i1) -> jumpdiff {
         r0.i *= i1.i;
         return 0;
     });
-    machine.defineRR("mul", [](Reg r0, Reg r1) -> jumpdiff {
+    machine.defineRR("mul", "%s *= %s", [](Reg r0, Reg r1) -> jumpdiff {
         r0.i *= r1.i;
         return 0;
     });
-    machine.defineRI("div", [](Reg r0, Imm i1) -> jumpdiff {
+    machine.defineRI("div", "%s /= %s", [](Reg r0, Imm i1) -> jumpdiff {
         r0.i /= i1.i;
         return 0;
     });
-    machine.defineRR("div", [](Reg r0, Reg r1) -> jumpdiff {
+    machine.defineRR("div", "%s /= %s", [](Reg r0, Reg r1) -> jumpdiff {
         r0.i /= r1.i;
         return 0;
     });

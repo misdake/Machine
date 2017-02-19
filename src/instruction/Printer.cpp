@@ -28,10 +28,10 @@ std::string dataReg(const Data& data) {
     return std::string(buf);
 }
 
-#define INST0 sprintf_s(buf, 128, "%s\n", name.c_str()); break;
-#define INST1(r0) sprintf_s(buf, 128, "%s %s\n", name.c_str(), r0.c_str()); break;
-#define INST2(r0, r1) sprintf_s(buf, 128, "%s %s, %s\n", name.c_str(), r0.c_str(), r1.c_str()); break;
-#define INST3(r0, r1, r2) sprintf_s(buf, 128, "%s %s, %s, %s\n", name.c_str(), r0.c_str(), r1.c_str(), r2.c_str()); break;
+#define INST0 sprintf_s(buf, 128, format.c_str(), name.c_str()); break;
+#define INST1(r0) sprintf_s(buf, 128, format.c_str(), name.c_str(), r0.c_str()); break;
+#define INST2(r0, r1) sprintf_s(buf, 128, format.c_str(), name.c_str(), r0.c_str(), r1.c_str()); break;
+#define INST3(r0, r1, r2) sprintf_s(buf, 128, format.c_str(), name.c_str(), r0.c_str(), r1.c_str(), r2.c_str()); break;
 
 std::string Printer::print(const Instruction& instruction) {
     char buf[128];
@@ -40,6 +40,7 @@ std::string Printer::print(const Instruction& instruction) {
     unsigned int i = nameW.find_last_of('_');
 
     std::string name = i != std::string::npos ? nameW.substr(0, i) : nameW;
+    std::string format = machine.opCodeForamt(instruction.opCode);
     OpType type = machine.opCodeType(instruction.opCode);
     std::string r0 = dataReg(instruction.oprand0);
     std::string r1 = dataReg(instruction.oprand1);
@@ -66,7 +67,7 @@ std::string Printer::print(const Program& program) {
     std::string all;
     for (const Instruction& instruction : program.instructions) {
         std::string line = print(instruction);
-        all += line;
+        all += line + "\n";
     }
     return all;
 }

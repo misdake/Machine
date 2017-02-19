@@ -43,6 +43,19 @@ const char* next(const char* input, bool b, const char* s) {
     return input;
 }
 
+std::vector<std::string> splitInverse(const char* input, const char* s) {
+    std::vector<std::string> r;
+    bool t = !contains(*input, s);
+    for (;;) {
+        const char* start = input;
+        const char* end = next(input, !t, s);
+        if (start == end) break;
+        if (!t) r.emplace_back(start, end - start);
+        t = !t;
+        input = end;
+    }
+    return r;
+}
 std::vector<std::string> split(const char* input, const char* s) {
     std::vector<std::string> r;
     bool t = contains(*input, s);
@@ -79,7 +92,7 @@ Entry readData(const char* c) {
 }
 
 Instruction Parser::parseInstruction(const char* input) {
-    std::vector<std::string> parts = split(input, " ,;\n");
+    std::vector<std::string> parts = splitInverse(input, "-_abcdefghijklmnopqrstuvwxyz0123456789");
     unsigned int size = parts.size();
     if (size == 0) return Instruction(-1);
 
