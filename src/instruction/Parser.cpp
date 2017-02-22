@@ -2,6 +2,8 @@
 
 #include "../machine/Machine.h"
 
+#include <climits>
+
 Parser::Parser(Machine& machine)
         : machine(machine) {
 }

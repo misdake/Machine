@@ -18,20 +18,20 @@ Printer::~Printer() {
 
 std::string dataImm(const Data& data) {
     char buf[16];
-    sprintf_s(buf, 16, "%d", data.i);
+    sprintf(buf, "%d", data.i);
     return std::string(buf);
 }
 
 std::string dataReg(const Data& data) {
     char buf[16];
-    sprintf_s(buf, 16, "r%d", data.i);
+    sprintf(buf, "r%d", data.i);
     return std::string(buf);
 }
 
-#define INST0 sprintf_s(buf, 128, format.c_str(), name.c_str()); break;
-#define INST1(r0) sprintf_s(buf, 128, format.c_str(), name.c_str(), r0.c_str()); break;
-#define INST2(r0, r1) sprintf_s(buf, 128, format.c_str(), name.c_str(), r0.c_str(), r1.c_str()); break;
-#define INST3(r0, r1, r2) sprintf_s(buf, 128, format.c_str(), name.c_str(), r0.c_str(), r1.c_str(), r2.c_str()); break;
+#define INST0() sprintf(buf, format.c_str(), name.c_str()); break;
+#define INST1(r0) sprintf(buf, format.c_str(), name.c_str(), r0.c_str()); break;
+#define INST2(r0, r1) sprintf(buf, format.c_str(), name.c_str(), r0.c_str(), r1.c_str()); break;
+#define INST3(r0, r1, r2) sprintf(buf, format.c_str(), name.c_str(), r0.c_str(), r1.c_str(), r2.c_str()); break;
 
 std::string Printer::print(const Instruction& instruction) {
     char buf[128];
@@ -49,7 +49,7 @@ std::string Printer::print(const Instruction& instruction) {
     std::string i1 = dataImm(instruction.oprand1);
     std::string i2 = dataImm(instruction.oprand2);
     switch (type) {
-        case OpType::N: INST0
+        case OpType::N: INST0()
         case OpType::R: INST1(r0)
         case OpType::I: INST1(i0)
         case OpType::RR: INST2(r0, r1)
