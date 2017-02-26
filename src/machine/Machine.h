@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 #include <cassert>
-#include "../program/Program.h"
-#include "../instruction/Instruction.h"
+#include "program/Program.h"
+#include "instruction/Instruction.h"
 
 class Machine;
 

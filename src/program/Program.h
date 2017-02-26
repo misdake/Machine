@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../instruction/Instruction.h"
+#include "instruction/Instruction.h"
 
 class Program {
 public:

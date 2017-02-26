@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../instruction/Instruction.h"
-#include "../program/Program.h"
+#include "Instruction.h"
+#include "program/Program.h"
 
 class Machine;
 

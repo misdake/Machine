@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "../machine/Machine.h"
+#include "machine/Machine.h"
 
 void defineArithmetic(Machine& machine) {
     machine.defineR("abs", [](Reg r0) -> jumpdiff {

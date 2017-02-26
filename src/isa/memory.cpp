@@ -1,7 +1,7 @@
 #include "memory.h"
 
-#include "../instruction/Instruction.h"
-#include "../machine/Machine.h"
+#include "instruction/Instruction.h"
+#include "machine/Machine.h"
 
 void defineMemory(Machine& machine) {
     machine.define("read_reg_rr", "r[%s] -> %s", OpType::RR, [](Machine& m, const Instruction& instruction) -> jumpdiff {

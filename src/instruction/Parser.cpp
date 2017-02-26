@@ -1,6 +1,6 @@
 #include "Parser.h"
 
-#include "../machine/Machine.h"
+#include "machine/Machine.h"
 
 #include <climits>
 

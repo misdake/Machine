@@ -1,6 +1,6 @@
 #include "logic.h"
 
-#include "../machine/Machine.h"
+#include "machine/Machine.h"
 
 void defineLogic(Machine& machine) {
     machine.defineR("bool", [](Reg r0) -> jumpdiff {

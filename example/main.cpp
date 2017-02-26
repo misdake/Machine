@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "../src/isa/all.h"
-#include "../src/instruction/Instruction.h"
-#include "../src/machine/Machine.h"
-#include "../src/instruction/Parser.h"
-#include "../src/instruction/Printer.h"
+#include <isa/isa_all.h>
+#include <instruction/Instruction.h>
+#include <machine/Machine.h>
+#include <instruction/Parser.h>
+#include <instruction/Printer.h>
 
 int main() {
     Machine machine(16);

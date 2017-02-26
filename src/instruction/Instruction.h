@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "../machine/Data.h"
+#include "machine/Data.h"
 
 typedef int16_t OpCode;
 

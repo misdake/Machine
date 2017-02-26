@@ -1,6 +1,6 @@
 #include "jump.h"
 
-#include "../machine/Machine.h"
+#include "machine/Machine.h"
 
 void defineJump(Machine& machine) {
     machine.defineRRR("jl", "%s < %s => pc += %s", [](Reg r0, Reg r1, Reg r2) -> jumpdiff {

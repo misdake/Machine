@@ -3,9 +3,8 @@
 #include <iostream>
 
 #include "Instruction.h"
-#include "../program/Program.h"
-
-#include "../machine/Machine.h"
+#include "program/Program.h"
+#include "machine/Machine.h"
 
 Printer::Printer(Machine& machine)
         : machine(machine) {
