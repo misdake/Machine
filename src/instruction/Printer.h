@@ -2,15 +2,15 @@
 
 #include <string>
 
-class Machine;
+class MachinePrototype;
 class Instruction;
 class Program;
 
 class Printer {
 private:
-    Machine& machine;
+    MachinePrototype& machine;
 public:
-    Printer(Machine& machine);
+    Printer(MachinePrototype& machine);
     ~Printer();
 
     std::string print(const Instruction& instruction);

@@ -4,7 +4,7 @@
 
 #include <climits>
 
-Parser::Parser(Machine& machine)
+Parser::Parser(MachinePrototype& machine)
         : machine(machine) {
 }
 

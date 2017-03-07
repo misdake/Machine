@@ -1,5 +1,5 @@
 #pragma once
 
-class Machine;
+class MachinePrototype;
 
-void defineJump(Machine& machine);
+void defineJump(MachinePrototype& machine);

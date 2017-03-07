@@ -2,7 +2,7 @@
 
 #include "machine/Machine.h"
 
-void defineLogic(Machine& machine) {
+void defineLogic(MachinePrototype& machine) {
     machine.defineR("bool", [](Reg r0) -> jumpdiff {
         r0.i = r0.i ? 1 : 0;
         return 0;

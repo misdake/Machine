@@ -3,13 +3,13 @@
 #include "Instruction.h"
 #include "program/Program.h"
 
-class Machine;
+class MachinePrototype;
 
 class Parser {
 private:
-    Machine& machine;
+    MachinePrototype& machine;
 public:
-    Parser(Machine& machine);
+    Parser(MachinePrototype& machine);
 
     Instruction parseInstruction(const char* input);
 

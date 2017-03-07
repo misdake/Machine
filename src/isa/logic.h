@@ -1,5 +1,5 @@
 #pragma once
 
-class Machine;
+class MachinePrototype;
 
-void defineLogic(Machine& machine);
+void defineLogic(MachinePrototype& machine);

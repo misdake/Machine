@@ -6,7 +6,7 @@
 #include "program/Program.h"
 #include "machine/Machine.h"
 
-Printer::Printer(Machine& machine)
+Printer::Printer(MachinePrototype& machine)
         : machine(machine) {
 
 }

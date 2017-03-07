@@ -1,5 +1,5 @@
 #pragma once
 
-class Machine;
+class MachinePrototype;
 
-void defineArithmetic(Machine& machine);
+void defineArithmetic(MachinePrototype& machine);

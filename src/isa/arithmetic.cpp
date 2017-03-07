@@ -4,7 +4,7 @@
 
 #include "machine/Machine.h"
 
-void defineArithmetic(Machine& machine) {
+void defineArithmetic(MachinePrototype& machine) {
     machine.defineR("abs", [](Reg r0) -> jumpdiff {
         r0.i = abs(r0.i);
         return 0;

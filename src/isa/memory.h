@@ -1,5 +1,5 @@
 #pragma once
 
-class Machine;
+class MachinePrototype;
 
-void defineMemory(Machine& machine);
+void defineMemory(MachinePrototype& machine);

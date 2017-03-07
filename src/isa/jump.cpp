@@ -2,7 +2,7 @@
 
 #include "machine/Machine.h"
 
-void defineJump(Machine& machine) {
+void defineJump(MachinePrototype& machine) {
     machine.defineRRR("jl", "%s < %s => pc += %s", [](Reg r0, Reg r1, Reg r2) -> jumpdiff {
         return r0.i < r1.i ? r2.i : 0;
     });

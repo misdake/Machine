@@ -7,22 +7,21 @@
 #include <instruction/Printer.h>
 
 int main() {
-    Machine machine(16);
-    defineArithmetic(machine);
-    defineJump(machine);
-    defineMemory(machine);
+    MachinePrototype prototype(16, 16);
+    defineArithmetic(prototype);
+    defineJump(prototype);
+    defineMemory(prototype);
 
-    machine.defineN("hello_world", []() -> jumpdiff {
+    prototype.defineN("hello_world", []() -> jumpdiff {
             std::cout << "Hello, World!" << std::endl;
             return 0;
         });
-    machine.defineR("print_reg", [](Reg reg) -> jumpdiff {
+    prototype.defineR("print_reg", [](Reg reg) -> jumpdiff {
         std::cout << reg.i << std::endl;
         return 0;
     });
 
-
-    Parser parser(machine);
+    Parser parser(prototype);
     Program program = parser.parseProgram(
             ""
                     "hello_world;"
@@ -33,10 +32,11 @@ int main() {
                     "jl r0, 10, -4;"
     );
 
-    Printer printer(machine);
+    Printer printer(prototype);
     std::string stringOutput = printer.print(program);
     std::cout << stringOutput << std::endl;
 
+    Machine machine(prototype);
     machine.run(program);
     machine.printReg();
 

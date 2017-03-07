@@ -4,11 +4,11 @@
 
 #include "machine/Data.h"
 
-typedef int16_t OpCode;
+typedef uint16_t OpCode;
 
 struct Instruction {
 private:
-    friend class Machine;
+    friend class MachinePrototype;
 
 public:
     const OpCode opCode;

@@ -7,31 +7,40 @@
 #include "program/Program.h"
 #include "instruction/Instruction.h"
 
+class MachinePrototype;
 class Machine;
 
 typedef std::function<jumpdiff(Machine&, const Instruction&)> InstructionFunction;
 
-class Machine {
+struct InstructionDefinition {
+    std::string name;
+    std::string format;
+    OpCode opCode;
+    OpType opType;
+    InstructionFunction function;
+};
+
+class MachinePrototype {
 private:
-    struct InstructionDefinition {
-        std::string name;
-        std::string format;
-        OpCode opCode;
-        OpType opType;
-        InstructionFunction function;
-    };
-
-    int32_t registerCount;
-    Data* registers;
-
     std::vector<InstructionDefinition> defs;
     std::map<std::string, OpCode> nameMap;
     OpCode next;
 
 public:
-    Machine(unsigned int registerCount);
+    const uint32_t registerCount;
+    const uint32_t paramCount;
 
-    ~Machine();
+    MachinePrototype(uint32_t registerCount, uint32_t paramCount)
+            : registerCount(registerCount), paramCount(paramCount) {
+        next = 0;
+    }
+
+    ~MachinePrototype() {
+    }
+
+    const std::vector<InstructionDefinition>& getDefinitions() const {
+        return defs;
+    }
 
     OpCode getOpCode(const char* name);
 
@@ -78,12 +87,59 @@ public:
     Instruction instruction(const char* name, int32_t d0, int32_t d1, int32_t d2) {
         return Instruction(getOpCode(name), d0, d1, d2);
     }
+};
 
-    Data& reg(int32_t addr);
+class Machine {
+private:
+    const uint32_t registerCount;
+    Data* registers;
+    const uint32_t paramCount;
+    Data* params;
+    const std::vector<InstructionDefinition>& defs;
 
-    void run(const Program& program);
+public:
+    Machine(const MachinePrototype& prototype)
+            : registerCount(registerCount),
+              paramCount(paramCount),
+              defs(prototype.getDefinitions()) {
+        registers = new Data[registerCount];
+        params = new Data[paramCount];
+    }
 
-    jumpdiff run(const Instruction& instruction);
+    ~Machine() {
+        delete[] registers;
+        delete[] params;
+    }
+
+    Data& reg(int32_t addr) {
+        if (addr < 0) addr = 0;
+        if (addr >= registerCount) addr = registerCount - 1;
+        return registers[addr];
+    }
+
+    Data& param(int32_t addr) {
+        if (addr < 0) addr = 0;
+        if (addr >= paramCount) addr = paramCount - 1;
+        return params[addr];
+    }
+
+    void run(const Program& program) {
+        int min = 0, max = program.instructions.size() - 1;
+        int pointer = 0;
+        while (pointer <= max) {
+            jumpdiff i = run(program.instructions[pointer]);
+            pointer += i + 1;
+            if (pointer < min) pointer = min;
+        }
+    }
+
+    jumpdiff run(const Instruction& instruction) {
+        if (instruction.opCode >= 0) {
+            const InstructionDefinition& def = defs.at(instruction.opCode);
+            return def.function(*this, instruction);
+        }
+        return 0;
+    }
 
     void printReg() {
         for (int i = 0; i != registerCount; i++) {
