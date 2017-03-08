@@ -2,13 +2,11 @@
 
 #include "machine/Machine.h"
 
-#include <climits>
-
 Parser::Parser(MachinePrototype& machine)
         : machine(machine) {
 }
 
-enum STR2INT_ERROR { SUCCESS, OVERFLOW, UNDERFLOW, INCONVERTIBLE };
+enum class STR2INT_ERROR { C_SUCCESS, C_OVERFLOW, C_UNDERFLOW, C_INCONVERTIBLE };
 
 STR2INT_ERROR str2int(int& i, char const* s, int base = 0) {
     char* end;
@@ -16,16 +14,16 @@ STR2INT_ERROR str2int(int& i, char const* s, int base = 0) {
     errno = 0;
     l = strtol(s, &end, base);
     if ((errno == ERANGE && l == LONG_MAX) || l > INT_MAX) {
-        return OVERFLOW;
+        return STR2INT_ERROR::C_OVERFLOW;
     }
     if ((errno == ERANGE && l == LONG_MIN) || l < INT_MIN) {
-        return UNDERFLOW;
+        return STR2INT_ERROR::C_UNDERFLOW;
     }
     if (*s == '\0' || *end != '\0') {
-        return INCONVERTIBLE;
+        return STR2INT_ERROR::C_INCONVERTIBLE;
     }
     i = l;
-    return SUCCESS;
+    return STR2INT_ERROR::C_SUCCESS;
 }
 
 bool contains(const char c, const char* s) {
@@ -86,7 +84,7 @@ Entry readData(const char* c) {
     Data dd;
     dd.i = 0;
     STR2INT_ERROR error = str2int(v, c);
-    if (error == SUCCESS) {
+    if (error == STR2INT_ERROR::C_SUCCESS) {
         dd.i = v;
         return {t, dd};
     }
@@ -95,7 +93,7 @@ Entry readData(const char* c) {
 
 Instruction Parser::parseInstruction(const char* input) {
     std::vector<std::string> parts = splitInverse(input, "-_abcdefghijklmnopqrstuvwxyz0123456789");
-    unsigned int size = parts.size();
+    size_t size = parts.size();
     if (size == 0) return Instruction(-1);
 
     //read data
@@ -138,8 +136,8 @@ Instruction Parser::parseInstruction(const char* input) {
 Program Parser::parseProgram(const char* input) {
     std::vector<Instruction> v;
     std::vector<std::string> lines = split(input, ";\n");
-    for (auto& i : lines) {
-        v.push_back(parseInstruction(i.c_str()));
+    for (std::string& s : lines) {
+        v.push_back(parseInstruction(s.c_str()));
     }
     return Program{v};
 }

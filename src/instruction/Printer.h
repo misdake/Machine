@@ -3,8 +3,8 @@
 #include <string>
 
 class MachinePrototype;
-class Instruction;
-class Program;
+struct Instruction;
+struct Program;
 
 class Printer {
 private:

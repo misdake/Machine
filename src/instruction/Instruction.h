@@ -4,12 +4,9 @@
 
 #include "machine/Data.h"
 
-typedef uint16_t OpCode;
+typedef int16_t OpCode;
 
 struct Instruction {
-private:
-    friend class MachinePrototype;
-
 public:
     const OpCode opCode;
     const Data oprand0;

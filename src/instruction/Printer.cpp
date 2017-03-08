@@ -6,6 +6,10 @@
 #include "program/Program.h"
 #include "machine/Machine.h"
 
+#ifdef _MSC_VER
+#pragma warning(disable:4996)
+#endif
+
 Printer::Printer(MachinePrototype& machine)
         : machine(machine) {
 
@@ -36,7 +40,7 @@ std::string Printer::print(const Instruction& instruction) {
     char buf[128];
     buf[0] = '\0';
     const std::string& nameW = machine.opCodeName(instruction.opCode);
-    unsigned int i = nameW.find_last_of('_');
+    unsigned int i = (unsigned int) nameW.find_last_of('_');
 
     std::string name = i != std::string::npos ? nameW.substr(0, i) : nameW;
     std::string format = machine.opCodeForamt(instruction.opCode);

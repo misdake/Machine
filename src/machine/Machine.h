@@ -27,10 +27,10 @@ private:
     OpCode next;
 
 public:
-    const uint32_t registerCount;
-    const uint32_t paramCount;
+    const int32_t registerCount;
+    const int32_t paramCount;
 
-    MachinePrototype(uint32_t registerCount, uint32_t paramCount)
+    MachinePrototype(int32_t registerCount, int32_t paramCount)
             : registerCount(registerCount), paramCount(paramCount) {
         next = 0;
     }
@@ -91,9 +91,9 @@ public:
 
 class Machine {
 private:
-    const uint32_t registerCount;
+    const int32_t registerCount;
     Data* registers;
-    const uint32_t paramCount;
+    const int32_t paramCount;
     Data* params;
     const std::vector<InstructionDefinition>& defs;
 
@@ -124,8 +124,8 @@ public:
     }
 
     void run(const Program& program) {
-        int min = 0, max = program.instructions.size() - 1;
-        int pointer = 0;
+        size_t min = 0, max = program.instructions.size() - 1;
+        size_t pointer = 0;
         while (pointer <= max) {
             jumpdiff i = run(program.instructions[pointer]);
             pointer += i + 1;

@@ -4,7 +4,7 @@
 
 #include "instruction/Instruction.h"
 
-class Program {
+struct Program {
 public:
     std::vector<Instruction> instructions;
 };
