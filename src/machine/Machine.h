@@ -99,8 +99,8 @@ private:
 
 public:
     Machine(const MachinePrototype& prototype)
-            : registerCount(registerCount),
-              paramCount(paramCount),
+            : registerCount(prototype.registerCount),
+              paramCount(prototype.paramCount),
               defs(prototype.getDefinitions()) {
         registers = new Data[registerCount];
         params = new Data[paramCount];

@@ -26,10 +26,13 @@ int main() {
             ""
                     "hello_world;"
                     "set r0, 0;"
-                    "print_reg r0;"
-                    "write_reg r0, r0;"
-                    "add r0, 1;"
-                    "jl r0, 10, -4;"
+                    "set r1, 1;"
+                    "set r2, r0;"
+                    "add r2, r1;"
+                    "print_reg r2;"
+                    "set r0, r1;"
+                    "set r1, r2;"
+                    "jl r2, 100, -6;"
     );
 
     Printer printer(prototype);
