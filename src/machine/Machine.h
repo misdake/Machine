@@ -90,10 +90,11 @@ public:
 };
 
 class Machine {
-private:
+public:
     const int32_t registerCount;
-    Data* registers;
     const int32_t paramCount;
+protected:
+    Data* registers;
     Data* params;
     const std::vector<InstructionDefinition>& defs;
 
@@ -123,7 +124,7 @@ public:
         return params[addr];
     }
 
-    void run(const Program& program) {
+    virtual void run(const Program& program) {
         size_t min = 0, max = program.instructions.size() - 1;
         size_t pointer = 0;
         while (pointer <= max) {
@@ -135,7 +136,7 @@ public:
 
     jumpdiff run(const Instruction& instruction) {
         if (instruction.opCode >= 0) {
-            const InstructionDefinition& def = defs.at(instruction.opCode);
+            const InstructionDefinition& def = defs.at((unsigned int) instruction.opCode);
             return def.function(*this, instruction);
         }
         return 0;
