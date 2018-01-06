@@ -27,7 +27,7 @@ std::string dataImm(const Data& data) {
 
 std::string dataReg(const Data& data) {
     char buf[16];
-    sprintf(buf, "r%d", data.i);
+    sprintf(buf, "r%X", data.i);
     return std::string(buf);
 }
 
