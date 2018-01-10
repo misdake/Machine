@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <cassert>
+#include <memory>
 #include "program/Program.h"
 #include "instruction/Instruction.h"
 
@@ -48,7 +49,7 @@ public:
     const std::string& opCodeForamt(OpCode opCode);
     OpType opCodeType(OpCode opCode);
 
-    void define(const std::string& name, const std::string& format, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function);
+    void define(const std::string& name, const std::string& format, OpType opType, InstructionFunction function);
 
     void defineN(const std::string& name, FunctionN&& function);
     void defineR(const std::string& name, FunctionR&& function);
@@ -94,34 +95,32 @@ public:
     const int32_t registerCount;
     const int32_t paramCount;
 protected:
-    Data* registers;
-    Data* params;
+    std::unique_ptr<Data[]> registers;
+    std::unique_ptr<Data[]> params;
     const std::vector<InstructionDefinition>& defs;
 
 public:
     Machine(const MachinePrototype& prototype)
             : registerCount(prototype.registerCount),
               paramCount(prototype.paramCount),
-              defs(prototype.getDefinitions()) {
-        registers = new Data[registerCount];
-        params = new Data[paramCount];
+              defs(prototype.getDefinitions()),
+              registers(new Data[registerCount]),
+              params(new Data[paramCount]) {
     }
 
     ~Machine() {
-        delete[] registers;
-        delete[] params;
     }
 
     Data& reg(int32_t addr) {
         if (addr < 0) addr = 0;
         if (addr >= registerCount) addr = registerCount - 1;
-        return registers[addr];
+        return registers.get()[addr];
     }
 
     Data& param(int32_t addr) {
         if (addr < 0) addr = 0;
         if (addr >= paramCount) addr = paramCount - 1;
-        return params[addr];
+        return params.get()[addr];
     }
 
     virtual void run(const Program& program) {
@@ -144,7 +143,7 @@ public:
 
     void printReg() {
         for (int i = 0; i != registerCount; i++) {
-            std::cout << "r" << (i < 10 ? "0" : "") << i << ": " << registers[i].i << "\n";
+            std::cout << "r" << (i < 10 ? "0" : "") << i << ": " << registers.get()[i].i << "\n";
         }
     }
 };
