@@ -10,7 +10,7 @@
 OpCode MachinePrototype::getOpCode(const char* name) {
     auto iterator = nameMap.find(name);
     if (iterator == nameMap.end()) {
-        std::cout << "unknown instruction '" << name << "'" << std::endl;
+        printf("unknown instruction '%s'", name);
         return -1;
     }
     return iterator->second;
@@ -42,11 +42,11 @@ void MachinePrototype::define(const std::string& name, const std::string& format
     if (iterator == nameMap.end()) {
         OpCode opCode = nameMap[name] = next++;
         defs.push_back(InstructionDefinition{name, f, opCode, opType, function});
-//            std::cout << "define instruction '" << name << "'" << std::endl;
+//        printf("define instruction '%s'", name);
     } else {
         OpCode opCode = nameMap[name];
         defs[opCode] = InstructionDefinition{name, f, opCode, opType, function};
-        std::cout << "redefine instruction '" << name << "'" << std::endl;
+        printf("redefine instruction '%s'", name);
     }
 }
 

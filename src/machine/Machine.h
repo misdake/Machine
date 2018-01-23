@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+#include <cstdio>
 #include <map>
 #include <string>
 #include <cassert>
@@ -143,7 +143,7 @@ public:
 
     void printReg() {
         for (int i = 0; i != registerCount; i++) {
-            std::cout << "r" << (i < 10 ? "0" : "") << i << ": " << registers.get()[i].i << "\n";
+            printf("r%X: %d\n", i, registers.get()[i].i);
         }
     }
 };

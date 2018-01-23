@@ -13,6 +13,8 @@ public:
     Printer(MachinePrototype& machine);
     ~Printer();
 
-    std::string print(const Instruction& instruction);
-    std::string print(const Program& program);
+    std::string gen(const Instruction& instruction) const;
+    std::string gen(const Program& program) const;
+    void print(const Instruction& instruction) const;
+    void print(const Program& program) const;
 };

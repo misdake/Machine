@@ -111,7 +111,7 @@ Instruction Parser::parseInstruction(const char* input) {
         case 1:
             break;
         default:
-            std::cout << "malformed instruction: " << input << std::endl;
+            printf("malformed instruction: %s", input);
     }
     //add postfix
     std::string op = parts[0];

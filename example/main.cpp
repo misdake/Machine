@@ -36,8 +36,7 @@ int main() {
     );
 
     Printer printer(prototype);
-    std::string stringOutput = printer.print(program);
-    std::cout << stringOutput << std::endl;
+    printer.print(program);
 
     Machine machine(prototype);
     machine.run(program);

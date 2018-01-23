@@ -36,7 +36,7 @@ std::string dataReg(const Data& data) {
 #define INST2(r0, r1) sprintf(buf, format.c_str(), name.c_str(), r0.c_str(), r1.c_str()); break;
 #define INST3(r0, r1, r2) sprintf(buf, format.c_str(), name.c_str(), r0.c_str(), r1.c_str(), r2.c_str()); break;
 
-std::string Printer::print(const Instruction& instruction) {
+std::string Printer::gen(const Instruction& instruction) const {
     char buf[128];
     buf[0] = '\0';
     const std::string& nameW = machine.opCodeName(instruction.opCode);
@@ -66,11 +66,21 @@ std::string Printer::print(const Instruction& instruction) {
     return std::string(buf);
 }
 
-std::string Printer::print(const Program& program) {
+std::string Printer::gen(const Program& program) const {
     std::string all;
     for (const Instruction& instruction : program.instructions) {
-        std::string line = print(instruction);
+        std::string line = gen(instruction);
         all += line + "\n";
     }
     return all;
+}
+
+void Printer::print(const Program& program) const {
+    std::string s = gen(program);
+    printf("%s\n", s.c_str());
+}
+
+void Printer::print(const Instruction& instruction) const {
+    std::string s = gen(instruction);
+    printf("%s\n", s.c_str());
 }
