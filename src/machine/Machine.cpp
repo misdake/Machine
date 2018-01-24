@@ -42,11 +42,11 @@ void MachinePrototype::define(const std::string& name, const std::string& format
     if (iterator == nameMap.end()) {
         OpCode opCode = nameMap[name] = next++;
         defs.push_back(InstructionDefinition{name, f, opCode, opType, function});
-//        printf("define instruction '%s'", name);
+//        printf("define instruction '%s'\n", name.c_str());
     } else {
         OpCode opCode = nameMap[name];
         defs[opCode] = InstructionDefinition{name, f, opCode, opType, function};
-        printf("redefine instruction '%s'", name);
+        printf("redefine instruction '%s'\n", name.c_str());
     }
 }
 
