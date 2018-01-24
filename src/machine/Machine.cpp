@@ -31,10 +31,10 @@ OpType MachinePrototype::opCodeType(OpCode opCode) {
     return def.opType;
 }
 
-#define functionCall0() [=](Machine& machine, const Instruction& instruction) -> jumpdiff { return function(); }
-#define functionCall1(a) [=](Machine& machine, const Instruction& instruction) -> jumpdiff { return function(a); }
-#define functionCall2(a, b) [=](Machine& machine, const Instruction& instruction) -> jumpdiff { return function(a, b); }
-#define functionCall3(a, b, c) [=](Machine& machine, const Instruction& instruction) -> jumpdiff { return function(a, b, c); }
+#define functionCall0() [=](Machine& machine, const Instruction& instruction) -> jumpdiff { function(); return 0; }
+#define functionCall1(a) [=](Machine& machine, const Instruction& instruction) -> jumpdiff { function(a); return 0; }
+#define functionCall2(a, b) [=](Machine& machine, const Instruction& instruction) -> jumpdiff { function(a, b); return 0; }
+#define functionCall3(a, b, c) [=](Machine& machine, const Instruction& instruction) -> jumpdiff { function(a, b, c); return 0; }
 
 void MachinePrototype::define(const std::string& name, const std::string& format, OpType opType, std::function<jumpdiff(Machine&, const Instruction&)> function) {
     auto iterator = nameMap.find(name);
